@@ -34,6 +34,7 @@
         var userUpd = data.docs[0].lastModifyingUserName;
         
         var ul = document.createElement('ul');
+        
         var li = document.createElement('li');
         li.appendChild(document.createTextNode(fileId));
         ul.appendChild(li);
@@ -44,6 +45,9 @@
         
         document.getElementById('result').appendChild(ul);
         
+        for(var k in data.docs) {
+   			alert(result[k]);
+		}
       }
     }
     </script>
