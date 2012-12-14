@@ -32,8 +32,12 @@
 		var titulo = data.docs[0].title;
         var fechaUpd = data.docs[0].modifiedDate;
         var userUpd = data.docs[0].lastModifyingUserName;
-        var fileInfo = document.createElement('ul');
-        	   	fileInfo.appendChild(createElement('li').appendChild(document.createTextNode(titulo)));
+        
+        var li = document.createElement('li')
+        var ul = document.createElement('ul')
+        li.appendChild(document.createTextNode(titulo))
+        ul.appendChild(li)
+        document.getElementById('result').appendChild(ul);
         
       }
     }
