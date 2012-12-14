@@ -33,10 +33,10 @@
         var fechaUpd = data.docs[0].modifiedDate;
         var userUpd = data.docs[0].lastModifyingUserName;
         
-        var li = document.createElement('li')
-        var ul = document.createElement('ul')
-        li.appendChild(document.createTextNode(titulo))
-        ul.appendChild(li)
+        var li = document.createElement('li');
+        var ul = document.createElement('ul');
+        li.appendChild(document.createTextNode(fileId));
+        ul.appendChild(li);
         document.getElementById('result').appendChild(ul);
         
       }
