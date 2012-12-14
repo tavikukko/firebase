@@ -29,7 +29,12 @@
     function pickerCallback(data) {
       if (data.action == google.picker.Action.PICKED) {
         var fileId = data.docs[0].id;
-        alert('The user selected: ' + fileId);
+		var titulo = data.docs[0].title;
+        var fechaUpd = data.docs[0].modifiedDate;
+        var userUpd = data.docs[0].lastModifyingUserName;
+        var fileInfo = document.createElement('ul');
+        fileInfo.appendChild(document.createTextNode('TITLE: ' + titulo + ' - LAST MODIF: ' + fechaUpd + ' - BY: ' + userUpd ));
+        document.getElementById('content').appendChild(fileInfo);
       }
     }
     </script>
