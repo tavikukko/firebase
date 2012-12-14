@@ -18,10 +18,6 @@
       var uploadView = new google.picker.DocsUploadView();
       view.setMimeTypes("image/png,image/jpeg,image/jpg");    
       var picker = new google.picker.PickerBuilder()
-          .enableFeature(google.picker.Feature.NAV_HIDDEN)
-          .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
-          .setAppId('603785550370.apps.googleusercontent.com')
-          //.setOAuthToken(AUTH_TOKEN) //Optional: The auth token used in the current Drive API session.
           .addView(view)
           .addView(uploadView)
           .setCallback(pickerCallback)
