@@ -15,6 +15,7 @@
     // Create and render a Picker object for searching images.
     function createPicker() {
       var view = new google.picker.View(google.picker.ViewId.DOCS);
+      var uploadView = new google.picker.DocsUploadView();
       view.setMimeTypes("image/png,image/jpeg,image/jpg");    
       var picker = new google.picker.PickerBuilder()
           .enableFeature(google.picker.Feature.NAV_HIDDEN)
@@ -22,7 +23,7 @@
           .setAppId('603785550370.apps.googleusercontent.com')
           //.setOAuthToken(AUTH_TOKEN) //Optional: The auth token used in the current Drive API session.
           .addView(view)
-          .addView(new google.picker.DocsUploadView())
+          .addView(uploadView)
           .setCallback(pickerCallback)
           .build();
        picker.setVisible(true);
