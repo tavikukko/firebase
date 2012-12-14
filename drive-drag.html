@@ -1,43 +1,70 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <title>Google Picker Example</title>
-
-    <!-- The standard Google Loader script; use your own key. -->
-    <script src="http://www.google.com/jsapi?key=AIzaSyAiFM9YHB2evpkRzABVuuQ-IRwTpJWGSqE"></script>
-    <script type="text/javascript">
-
-    // Use the Google Loader script to load the google.picker script.
-    google.setOnLoadCallback(createPicker);
-    google.load('picker', '1');
-
-    // Create and render a Picker object for searching images.
-    var view = new google.picker.View(google.picker.ViewId.DOCS);
-    view.setMimeTypes("image/png,image/jpeg,image/jpg");
-
-    function createPicker() {
-       picker = new google.picker.PickerBuilder()
-          .enableFeature(google.picker.Feature.NAV_HIDDEN)
-          .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
-          .setAppId('603785550370.apps.googleusercontent.com')
-          .addView(view)
-          .addView(new google.picker.DocsUploadView())
-          .setCallback(pickerCallback)
-          .build();
-       picker.setVisible(true);
-    }
-
-    // A simple callback implementation.
-    function pickerCallback(data) {
-        if (data.action == google.picker.Action.PICKED) {
-            var fileId = data.docs[0].id;
-            alert('The user selected: ' + fileId);
+    <meta charset='utf-8' />
+    <style>
+        p {         
+            font-family: Tahoma;
         }
-    }
-    </script>
+    </style>
   </head>
   <body>
-    <div id="result"></div>
+    <!--Add a button for the user to click to initiate auth sequence -->
+    <button id="authorize-button" style="visibility: hidden">Authorize</button>
+    <script type="text/javascript">
+      var clientId = '603785550370.apps.googleusercontent.com';
+      var apiKey = 'AIzaSyAiFM9YHB2evpkRzABVuuQ-IRwTpJWGSqE';
+      // To enter one or more authentication scopes, refer to the documentation for the API.
+      var scopes = 'https://www.googleapis.com/auth/drive';
+
+      // Use a button to handle authentication the first time.
+      function handleClientLoad() {
+        gapi.client.setApiKey(apiKey);
+        window.setTimeout(checkAuth,1);
+      }
+
+      function checkAuth() {
+        gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, handleAuthResult);
+      }
+
+      function handleAuthResult(authResult) {
+        var authorizeButton = document.getElementById('authorize-button');
+        if (authResult && !authResult.error) {
+          authorizeButton.style.visibility = 'hidden';
+          makeApiCall();
+        } else {
+          authorizeButton.style.visibility = '';
+          authorizeButton.onclick = handleAuthClick;
+        }
+      }
+
+      function handleAuthClick(event) {
+        gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: false}, handleAuthResult);
+        return false;
+      }
+
+      // Load the API and make an API call.  Display the results on the screen.
+      function makeApiCall() {
+        gapi.client.load('drive', 'v2', function() {
+
+          var request = gapi.client.drive.files.list ( {'maxResults': 5 } );
+
+          request.execute(function(resp) {          
+            for (i=0; i<resp.items.length; i++) {
+                    var titulo = resp.items[i].title;
+                    var fechaUpd = resp.items[i].modifiedDate;
+                    var userUpd = resp.items[i].lastModifyingUserName;
+
+                    var fileInfo = document.createElement('li');
+                    fileInfo.appendChild(document.createTextNode('TITLE: ' + titulo + ' - LAST MODIF: ' + fechaUpd + ' - BY: ' + userUpd ));                
+                    document.getElementById('content').appendChild(fileInfo);
+            }
+          });        
+        });
+      }
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>    
+    <p><b>These are 5 files from your GDrive :)</b></p>
+    <div id="content"></div>
   </body>
 </html>
